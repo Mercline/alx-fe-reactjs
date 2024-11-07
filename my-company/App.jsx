@@ -1,15 +1,14 @@
-// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Home from './Home';
-import About from './About';
-import Services from './Services';
-import Contact from './Contact';
+import Home from './Home'; // Assuming you have Home component
+import About from './About'; // Assuming you have About component
+import Services from './Services'; // Assuming you have Services component
+import Contact from './Contact'; // Assuming you have Contact component
 
 function App() {
   return (
     <Router>
-      {/* Navigation bar */}
+      {/* Navigation Bar */}
       <nav style={styles.nav}>
         <ul style={styles.navList}>
           <li><Link to="/" style={styles.navItem}>Home</Link></li>
@@ -19,14 +18,16 @@ function App() {
         </ul>
       </nav>
 
+      {/* Main Content */}
       <div style={styles.content}>
-        {/* Routes setup */}
         <Routes>
+          {/* Define Routes for Each Page */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
-          {/* Fallback Route for 404 */}
+          
+          {/* Catch-all Route for 404 */}
           <Route path="*" element={<h2>Page Not Found</h2>} />
         </Routes>
       </div>
@@ -34,6 +35,7 @@ function App() {
   );
 }
 
+// Styling for the app
 const styles = {
   nav: {
     padding: '10px',
