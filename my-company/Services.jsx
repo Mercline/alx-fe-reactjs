@@ -1,7 +1,6 @@
 import React from 'react';
 
 function Services() {
-  // Container styles
   const containerStyle = {
     padding: '50px 20px',
     backgroundColor: '#f9f9f9',
