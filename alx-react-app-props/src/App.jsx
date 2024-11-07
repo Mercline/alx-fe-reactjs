@@ -1,19 +1,20 @@
+// src/App.jsx
 import React, { useState } from 'react';
-import UserContext from './UserContext';  // Import UserContext
-import UserDetails from './components/UserDetails';  // Import UserDetails component
+import UserContext from './UserContext'; // Import the UserContext
+import UserProfile from './components/UserProfile'; // Import UserProfile
 
 function App() {
-    // Define userData in the state
+    // Initialize user data state
     const [userData, setUserData] = useState({
         name: 'Alice',
-        email: 'alice@example.com',
+        age: 25,
+        bio: 'Loves hiking and photography',
     });
 
     return (
         <UserContext.Provider value={{ userData, setUserData }}>
-            {/* Other components can now consume userData */}
-            <h1>User Profile</h1>
-            <UserDetails />  {/* UserDetails will consume userData from UserContext */}
+            {/* UserProfile now consumes userData from UserContext */}
+            <UserProfile />
         </UserContext.Provider>
     );
 }
