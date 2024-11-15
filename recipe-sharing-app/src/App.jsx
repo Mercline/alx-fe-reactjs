@@ -1,21 +1,47 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Import necessary components
-import RecipeList from './components/RecipeList';
-import RecipeDetails from './components/RecipeDetails'; // Make sure this component exists
-import AddRecipeForm from './components/AddRecipeForm'; // Add this if you have a form for adding recipes
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useRecipeStore } from './store/recipeStore';
+import SearchBar from './components/SearchBar';
 
+// RecipeList Component
+const RecipeList = () => {
+  // Get the filtered recipes from the Zustand store
+  const filteredRecipes = useRecipeStore(state => state.filteredRecipes);
+  const recipes = useRecipeStore(state => state.recipes);
+
+  useEffect(() => {
+    // If no search term is set, the filteredRecipes will be the same as recipes
+    if (filteredRecipes.length === 0 && recipes.length > 0) {
+      useRecipeStore.getState().filterRecipes(); // Trigger filtering if needed
+    }
+  }, [recipes, filteredRecipes]);
+
+  return (
+    <div>
+      {filteredRecipes.length > 0 ? (
+        filteredRecipes.map((recipe) => (
+          <div key={recipe.id}>
+            <h3>
+              <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link>
+            </h3>
+            <p>{recipe.description}</p>
+          </div>
+        ))
+      ) : (
+        <p>No recipes found.</p>
+      )}
+    </div>
+  );
+};
+
+// Main App Component
 const App = () => {
   return (
-    <Router> {/* Wrap your app in Router */}
-      <div>
-        <h1>Recipe Sharing App</h1>
-        <Routes> {/* Define the routes for your app */}
-          <Route path="/" element={<RecipeList />} /> {/* Home route */}
-          <Route path="/recipe/:id" element={<RecipeDetails />} /> {/* Route for recipe details */}
-          <Route path="/add" element={<AddRecipeForm />} /> {/* Route for adding new recipes */}
-        </Routes>
-      </div>
-    </Router>
+    <div>
+      <h1>Recipe Sharing App</h1>
+      <SearchBar /> {/* Search bar for filtering recipes */}
+      <RecipeList /> {/* Display the filtered recipe list */}
+    </div>
   );
 };
 
