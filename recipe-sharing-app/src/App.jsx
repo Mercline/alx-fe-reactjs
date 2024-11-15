@@ -4,6 +4,8 @@ import RecipeList from './components/RecipeList';
 import SearchBar from './components/SearchBar';
 import AddRecipeForm from './components/AddRecipeForm';  // Import the AddRecipeForm
 import RecipeDetail from './components/RecipeDetail';    // Import the RecipeDetail
+import FavoritesList from './components/FavoritesList'; // Adjust path if necessary
+import RecommendationsList from './components/RecommendationsList'; // Adjust path if necessary
 
 const App = () => {
   return (
@@ -11,6 +13,10 @@ const App = () => {
       <div>
         <h1>Recipe Sharing App</h1>
         <SearchBar /> {/* Search bar for filtering recipes */}
+
+        {/* Add favorites and recommendations sections */}
+        <FavoritesList />  {/* Display the list of favorite recipes */}
+        <RecommendationsList />  {/* Display personalized recommendations */}
 
         <Routes>
           {/* Route to show all recipes */}
