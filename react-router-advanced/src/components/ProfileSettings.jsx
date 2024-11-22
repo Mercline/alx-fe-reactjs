@@ -1,8 +1,6 @@
-// src/components/ProfileSettings.jsx
-import React from 'react';
-
-const ProfileSettings = () => {
-  return <div><h3>Profile Settings</h3><p>Modify your profile settings here.</p></div>;
-};
+// src/pages/ProfileSettings.jsx
+function ProfileSettings() {
+  return <div>Profile Settings Page</div>;
+}
 
 export default ProfileSettings;

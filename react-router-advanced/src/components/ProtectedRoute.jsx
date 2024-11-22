@@ -1,15 +1,14 @@
-import React from 'react';
+// src/components/ProtectedRoute.jsx
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
+function ProtectedRoute({ children }) {
   const isAuthenticated = false; // Simulate authentication status
 
   if (!isAuthenticated) {
-    // Redirect to login if not authenticated
-    return <Navigate to="/login" />;
+    return <Navigate to="/" replace />;
   }
 
-  return children; // Render the children if authenticated
-};
+  return children;
+}
 
 export default ProtectedRoute;
