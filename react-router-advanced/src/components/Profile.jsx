@@ -1,3 +1,4 @@
+// src/components/Profile.jsx
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
@@ -15,8 +16,8 @@ const Profile = () => {
           </li>
         </ul>
       </nav>
-      <hr />
-      {/* Nested route content will appear here */}
+
+      {/* This is where the nested routes will be rendered */}
       <Outlet />
     </div>
   );

@@ -1,29 +1,28 @@
+// src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './components/Home';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Import the components
 import Profile from './components/Profile';
-import Login from './components/Login';
 import ProfileDetails from './components/ProfileDetails';
 import ProfileSettings from './components/ProfileSettings';
-import ProtectedRoute from './components/ProtectedRoute';
+import Home from './components/Home';
+import Login from './components/Login';
 
 const App = () => {
   return (
     <Router>
       <div>
-        <h1>React Router Advanced Example</h1>
+        <h1>React Router - Nested Routing Example</h1>
+
+        {/* Define the main routes */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          >
-            {/* Nested Routes */}
+          
+          {/* Profile route with nested routes */}
+          <Route path="/profile" element={<Profile />}>
+            {/* Nested routes for ProfileDetails and ProfileSettings */}
             <Route path="details" element={<ProfileDetails />} />
             <Route path="settings" element={<ProfileSettings />} />
           </Route>
