@@ -6,7 +6,6 @@ import Login from './components/Login';
 import ProfileDetails from './components/ProfileDetails';
 import ProfileSettings from './components/ProfileSettings';
 import ProtectedRoute from './components/ProtectedRoute';
-import BlogPost from './components/BlogPost'; // Import the BlogPost component
 
 const App = () => {
   return (
@@ -24,11 +23,10 @@ const App = () => {
               </ProtectedRoute>
             }
           >
+            {/* Nested Routes */}
             <Route path="details" element={<ProfileDetails />} />
             <Route path="settings" element={<ProfileSettings />} />
           </Route>
-          {/* Add the dynamic route for blog posts */}
-          <Route path="/post/:postId" element={<BlogPost />} />
         </Routes>
       </div>
     </Router>
