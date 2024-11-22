@@ -2,7 +2,7 @@
 import React from 'react';
 
 const ProfileSettings = () => {
-  return <h3>Profile Settings</h3>;
+  return <div><h3>Profile Settings</h3><p>Modify your profile settings here.</p></div>;
 };
 
 export default ProfileSettings;
