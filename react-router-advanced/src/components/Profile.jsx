@@ -16,7 +16,8 @@ const Profile = () => {
         </ul>
       </nav>
       <hr />
-      <Outlet /> {/* Renders nested routes */}
+      {/* Renders nested route components */}
+      <Outlet />
     </div>
   );
 };
