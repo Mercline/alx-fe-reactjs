@@ -1,15 +1,19 @@
 // src/__tests__/TodoList.test.js
 import { render, screen, fireEvent } from '@testing-library/react';
-import TodoList from '../components/TodoList';
+import TodoList from '../components/TodoList'; // Ensure correct import
 
 describe('TodoList Component', () => {
+  
+  // Test initial rendering
   test('renders initial todos', () => {
     render(<TodoList />);
+    
     // Check if the initial todos are rendered
     expect(screen.getByText(/Learn React/i)).toBeInTheDocument();
     expect(screen.getByText(/Learn Testing/i)).toBeInTheDocument();
   });
 
+  // Test adding new todos
   test('can add a new todo using AddTodoForm', () => {
     render(<TodoList />);
     
@@ -24,6 +28,7 @@ describe('TodoList Component', () => {
     expect(screen.getByText('New Todo')).toBeInTheDocument();
   });
 
+  // Test toggling todo completion
   test('can toggle todo completion', () => {
     render(<TodoList />);
     const todoItem = screen.getByText('Learn React');
@@ -39,6 +44,7 @@ describe('TodoList Component', () => {
     expect(todoItem).toHaveStyle('text-decoration: none');
   });
 
+  // Test deleting a todo
   test('can delete a todo', () => {
     render(<TodoList />);
     
