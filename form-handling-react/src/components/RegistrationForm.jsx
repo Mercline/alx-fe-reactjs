@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 
 const RegistrationForm = () => {
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -23,9 +27,9 @@ const RegistrationForm = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      console.log('Form Submitted:', formData);
-      // Simulate API call
+      console.log('Form submitted:', formData);
       alert('Registration Successful!');
+      setFormData({ username: '', email: '', password: '' }); // Reset form
     }
   };
 
@@ -36,30 +40,30 @@ const RegistrationForm = () => {
         <input
           type="text"
           name="username"
-          value={formData.username}
-          onChange={handleChange}
+          value={formData.username} // Binding value to state
+          onChange={handleChange} // Updating state on change
         />
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
       </div>
       <div>
         <label>Email:</label>
         <input
           type="email"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={formData.email} // Binding value to state
+          onChange={handleChange} // Updating state on change
         />
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
       </div>
       <div>
         <label>Password:</label>
         <input
           type="password"
           name="password"
-          value={formData.password}
-          onChange={handleChange}
+          value={formData.password} // Binding value to state
+          onChange={handleChange} // Updating state on change
         />
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
       </div>
       <button type="submit">Register</button>
     </form>
