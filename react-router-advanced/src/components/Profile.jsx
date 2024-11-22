@@ -17,7 +17,7 @@ const Profile = () => {
         </ul>
       </nav>
 
-      {/* Outlet renders nested routes */}
+      {/* This is where the nested routes will be rendered */}
       <Outlet />
     </div>
   );
