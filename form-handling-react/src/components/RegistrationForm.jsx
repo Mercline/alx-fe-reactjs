@@ -15,9 +15,9 @@ const RegistrationForm = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.username) newErrors.username = 'Username is required.';
-    if (!formData.email) newErrors.email = 'Email is required.';
-    if (!formData.password) newErrors.password = 'Password is required.';
+    if (!formData.username.trim()) newErrors.username = 'Username is required.';
+    if (!formData.email.trim()) newErrors.email = 'Email is required.';
+    if (!formData.password.trim()) newErrors.password = 'Password is required.';
     return newErrors;
   };
 
@@ -30,6 +30,7 @@ const RegistrationForm = () => {
       console.log('Form submitted:', formData);
       alert('Registration Successful!');
       setFormData({ username: '', email: '', password: '' }); // Reset form
+      setErrors({}); // Clear errors
     }
   };
 
@@ -40,8 +41,8 @@ const RegistrationForm = () => {
         <input
           type="text"
           name="username"
-          value={formData.username} // Binding value to state
-          onChange={handleChange} // Updating state on change
+          value={formData.username}
+          onChange={handleChange}
         />
         {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
       </div>
@@ -50,8 +51,8 @@ const RegistrationForm = () => {
         <input
           type="email"
           name="email"
-          value={formData.email} // Binding value to state
-          onChange={handleChange} // Updating state on change
+          value={formData.email}
+          onChange={handleChange}
         />
         {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
       </div>
@@ -60,8 +61,8 @@ const RegistrationForm = () => {
         <input
           type="password"
           name="password"
-          value={formData.password} // Binding value to state
-          onChange={handleChange} // Updating state on change
+          value={formData.password}
+          onChange={handleChange}
         />
         {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
       </div>
