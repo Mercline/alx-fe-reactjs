@@ -1,56 +1,41 @@
 // src/__tests__/TodoList.test.js
 import { render, screen, fireEvent } from '@testing-library/react';
-import TodoList from '../TodoList';
-import AddTodoForm from '../AddTodoForm';
+import TodoList from '../components/TodoList';
 
 describe('TodoList Component', () => {
-  test('renders TodoList and displays demo todos', () => {
+  test('renders initial todos', () => {
     render(<TodoList />);
-
-    // Check if the Todo List is rendered
-    expect(screen.getByRole('list')).toBeInTheDocument();
-
-    // Check if the initial demo todos are displayed
-    expect(screen.getByText('Learn React')).toBeInTheDocument();
-    expect(screen.getByText('Build a Todo App')).toBeInTheDocument();
-    expect(screen.getByText('Write Tests')).toBeInTheDocument();
+    expect(screen.getByText(/Learn React/i)).toBeInTheDocument();
+    expect(screen.getByText(/Learn Testing/i)).toBeInTheDocument();
   });
 
-  test('can add new todo', () => {
+  test('can add a new todo', () => {
     render(<TodoList />);
+    const input = screen.getByPlaceholderText('Add new todo');
+    const button = screen.getByText('Add');
 
-    // Simulate adding a new todo using the form
-    const input = screen.getByPlaceholderText('Add a new todo');
     fireEvent.change(input, { target: { value: 'New Todo' } });
-    fireEvent.submit(screen.getByRole('form'));
+    fireEvent.click(button);
 
-    // Verify if new todo is added
     expect(screen.getByText('New Todo')).toBeInTheDocument();
   });
 
   test('can toggle todo completion', () => {
     render(<TodoList />);
+    const todoItem = screen.getByText('Learn React');
+    fireEvent.click(todoItem);
 
-    // Find the todo item
-    const todo = screen.getByText('Learn React');
-
-    // Click to toggle the todo
-    fireEvent.click(todo);
-
-    // Verify if the todo gets a line-through when clicked
-    expect(todo).toHaveStyle('text-decoration: line-through');
+    expect(todoItem).toHaveStyle('text-decoration: line-through');
+    
+    fireEvent.click(todoItem);
+    expect(todoItem).toHaveStyle('text-decoration: none');
   });
 
-  test('can delete todo', () => {
+  test('can delete a todo', () => {
     render(<TodoList />);
-
-    // Find the delete button for the first todo
-    const deleteButton = screen.getByText('Delete');
-
-    // Click to delete the todo
+    const deleteButton = screen.getAllByText('Delete')[0];
     fireEvent.click(deleteButton);
 
-    // Verify if the todo is deleted
-    expect(screen.queryByText('Learn React')).not.toBeInTheDocument();
+    expect(screen.queryByText('Learn React')).toBeNull();
   });
 });
