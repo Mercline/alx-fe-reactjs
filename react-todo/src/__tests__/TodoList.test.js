@@ -1,7 +1,7 @@
 // src/__tests__/TodoList.test.js
 import { render, screen, fireEvent } from '@testing-library/react';
 import TodoList from '../TodoList';
-import AddTodoForm from '../AddTodoForm'; 
+import AddTodoForm from '../AddTodoForm';
 
 describe('TodoList Component', () => {
   test('renders TodoList and displays demo todos', () => {
@@ -17,7 +17,9 @@ describe('TodoList Component', () => {
   });
 
   test('can add new todo', () => {
-    render(<AddTodoForm onAddTodo={addTodo} />);
+    render(<TodoList />);
+
+    // Simulate adding a new todo using the form
     const input = screen.getByPlaceholderText('Add a new todo');
     fireEvent.change(input, { target: { value: 'New Todo' } });
     fireEvent.submit(screen.getByRole('form'));
@@ -42,7 +44,7 @@ describe('TodoList Component', () => {
   test('can delete todo', () => {
     render(<TodoList />);
 
-    // Find the delete button
+    // Find the delete button for the first todo
     const deleteButton = screen.getByText('Delete');
 
     // Click to delete the todo
