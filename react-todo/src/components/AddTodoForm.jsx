@@ -1,14 +1,19 @@
-// src/components/AddTodoForm.jsx
-import React, { useState } from 'react';
+// src/AddTodoForm.js
+import React, { useState } from "react";
 
-function AddTodoForm({ onAddTodo }) {
-  const [newTodo, setNewTodo] = useState('');
+function AddTodoForm({ addTodo }) {
+  const [newTodo, setNewTodo] = useState("");
+
+  const handleChange = (e) => {
+    setNewTodo(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newTodo.trim() === '') return;
-    onAddTodo(newTodo);
-    setNewTodo('');
+    if (newTodo.trim()) {
+      addTodo(newTodo);
+      setNewTodo("");
+    }
   };
 
   return (
@@ -16,10 +21,10 @@ function AddTodoForm({ onAddTodo }) {
       <input
         type="text"
         value={newTodo}
-        onChange={(e) => setNewTodo(e.target.value)}
+        onChange={handleChange}
         placeholder="Add new todo"
       />
-      <button type="submit">Add</button>
+      <button type="submit">Add Todo</button>
     </form>
   );
 }
