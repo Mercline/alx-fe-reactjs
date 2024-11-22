@@ -11,8 +11,13 @@ const fetchPosts = async () => {
 };
 
 const PostsComponent = () => {
-  // Use the useQuery hook to fetch data
-  const { data, error, isLoading, isError, refetch } = useQuery('posts', fetchPosts);
+  // Use the useQuery hook with configuration options
+  const { data, error, isLoading, isError, refetch } = useQuery('posts', fetchPosts, {
+    cacheTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    staleTime: 1000 * 60, // Data becomes stale after 1 minute
+    refetchOnWindowFocus: true, // Refetch data when the window is focused
+    keepPreviousData: true, // Keep previous data when fetching new data (helps with pagination)
+  });
 
   // Handle the loading state
   if (isLoading) {
