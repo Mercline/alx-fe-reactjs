@@ -5,12 +5,14 @@ import TodoList from '../components/TodoList';
 describe('TodoList Component', () => {
   test('renders initial todos', () => {
     render(<TodoList />);
+    // Check if the initial todos are rendered
     expect(screen.getByText(/Learn React/i)).toBeInTheDocument();
     expect(screen.getByText(/Learn Testing/i)).toBeInTheDocument();
   });
 
   test('can add a new todo using AddTodoForm', () => {
     render(<TodoList />);
+    
     const input = screen.getByPlaceholderText('Add new todo');
     const button = screen.getByText('Add');
 
@@ -39,6 +41,7 @@ describe('TodoList Component', () => {
 
   test('can delete a todo', () => {
     render(<TodoList />);
+    
     const deleteButton = screen.getAllByText('Delete')[0];
     
     // Simulate clicking the delete button for the first todo
