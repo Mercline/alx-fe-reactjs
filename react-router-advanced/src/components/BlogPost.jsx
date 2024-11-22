@@ -1,17 +1,14 @@
-// src/components/BlogPost.jsx
-import React from 'react';
+// src/pages/BlogPost.jsx
 import { useParams } from 'react-router-dom';
 
-const BlogPost = () => {
-  // Extract the dynamic parameter from the URL
-  const { postId } = useParams();
-
+function BlogPost() {
+  const { id } = useParams(); // Extract the 'id' from the URL
   return (
     <div>
-      <h2>Blog Post</h2>
-      <p>This is the content for post with ID: {postId}</p>
+      <h1>Blog Post {id}</h1>
+      {/* Fetch and display the blog post content here based on the 'id' */}
     </div>
   );
-};
+}
 
 export default BlogPost;
