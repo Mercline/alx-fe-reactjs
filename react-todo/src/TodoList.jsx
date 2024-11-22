@@ -1,7 +1,14 @@
 // src/TodoList.js
-import React from 'react';
+import React, { useState } from 'react';
 
-const TodoList = ({ todos, setTodos }) => {
+const TodoList = () => {
+  const [todos, setTodos] = useState([
+    { id: 1, text: 'Learn React', completed: false },
+    { id: 2, text: 'Build a Todo App', completed: false },
+    { id: 3, text: 'Write Tests', completed: false }
+  ]);
+
+  // Toggle completion of todo
   const toggleTodo = (id) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -10,6 +17,7 @@ const TodoList = ({ todos, setTodos }) => {
     );
   };
 
+  // Delete a todo
   const deleteTodo = (id) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
