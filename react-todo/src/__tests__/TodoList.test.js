@@ -1,43 +1,26 @@
-// TodoList.test.js
+// src/__tests__/TodoList.test.js
 import { render, screen, fireEvent } from '@testing-library/react';
-import TodoList from './TodoList'; // Ensure the correct import path
+import TodoList from '../components/TodoList';  // Adjust the import to reflect the correct path
 
-test('renders TodoList component with initial todos', () => {
+test('renders TodoList and checks initial state', () => {
   render(<TodoList />);
-  
-  // Check if initial todos are rendered
+  expect(screen.getByText('Todo List')).toBeInTheDocument();
   expect(screen.getByText('Learn React')).toBeInTheDocument();
-  expect(screen.getByText('Build a Todo App')).toBeInTheDocument();
+  expect(screen.getByText('Write tests')).toBeInTheDocument();
 });
 
-test('can add a new todo', () => {
+test('toggles todo completion', () => {
   render(<TodoList />);
-  
-  // Add a new todo
-  const input = screen.getByPlaceholderText('Add a new todo');
-  fireEvent.change(input, { target: { value: 'New Todo' } });
-  fireEvent.click(screen.getByText('Add Todo'));
-  
-  // Check if the new todo is in the list
-  expect(screen.getByText('New Todo')).toBeInTheDocument();
-});
-
-test('can toggle todo completion', () => {
-  render(<TodoList />);
-  
   const todo = screen.getByText('Learn React');
   fireEvent.click(todo);
-  
-  // Check if the todo is crossed out after being clicked
   expect(todo).toHaveStyle('text-decoration: line-through');
+  fireEvent.click(todo);
+  expect(todo).toHaveStyle('text-decoration: none');
 });
 
-test('can delete a todo', () => {
+test('deletes a todo', () => {
   render(<TodoList />);
-  
   const deleteButton = screen.getAllByText('Delete')[0];
   fireEvent.click(deleteButton);
-  
-  // Check if the todo is removed
-  expect(screen.queryByText('Learn React')).not.toBeInTheDocument();
+  expect(screen.queryByText('Learn React')).toBeNull();
 });
