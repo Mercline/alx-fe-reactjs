@@ -1,7 +1,8 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"], // Specify files for content scanning
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"], // Paths to your templates
   theme: {
-    extend: {}, // Extend default themes if needed
+    extend: {}, // Extend the default theme if needed
   },
-  plugins: [], // Add plugins if required
+  plugins: [], // Add plugins here if necessary
 };
