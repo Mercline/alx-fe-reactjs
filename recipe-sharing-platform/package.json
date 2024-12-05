@@ -10,7 +10,8 @@
   "dependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "vite": "^4.0.0"
+    "vite": "^4.0.0",
+    "react-router-dom": "^6.0.0"  
   },
   "devDependencies": {
     "tailwindcss": "^2.2.19",  
