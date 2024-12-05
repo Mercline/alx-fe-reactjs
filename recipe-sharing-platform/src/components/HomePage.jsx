@@ -1,12 +1,12 @@
 // src/components/HomePage.jsx
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';  // Used for routing to RecipeDetail page
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
-    // Fetch the mock data from data.json
     fetch('/src/data.json')
       .then((response) => response.json())
       .then((data) => setRecipes(data));
@@ -17,7 +17,7 @@ const HomePage = () => {
       <h1 className="text-4xl font-bold text-center text-blue-500 mb-6">
         Welcome to Recipe Sharing Platform!
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {recipes.map((recipe) => (
           <div
             key={recipe.id}
