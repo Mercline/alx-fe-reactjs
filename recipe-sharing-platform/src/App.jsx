@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';  // HomePage component
@@ -10,7 +11,7 @@ function App() {
         {/* Route for the HomePage */}
         <Route path="/" element={<HomePage />} />
         
-        {/* Route for the Recipe Detail page, with dynamic ID */}
+        {/* Route for the Recipe Detail page */}
         <Route path="/recipe/:id" element={<RecipeDetail />} />
       </Routes>
     </Router>
