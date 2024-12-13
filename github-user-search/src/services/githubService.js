@@ -1,10 +1,12 @@
-// githubService.js
 import axios from 'axios';
 
+// Base URL for GitHub API search endpoint
 const BASE_URL = 'https://api.github.com/search/users';
 
+// Function to fetch user data based on advanced search criteria (username, location, minRepos)
 export const fetchUserData = async ({ username, location = '', minRepos = 0, page = 1 }) => {
   try {
+    // Construct the query string with advanced search parameters
     let query = username ? `${username}` : ''; // Start with username
     if (location) query += ` location:${location}`; // Add location if provided
     if (minRepos > 0) query += ` repos:>=${minRepos}`; // Add minimum repos if provided
@@ -15,11 +17,12 @@ export const fetchUserData = async ({ username, location = '', minRepos = 0, pag
 
     const response = await axios.get(`${BASE_URL}?q=${query}&page=${page}&per_page=10`);
 
+    // If no users are found, throw the error with a custom message
     if (response.data.items.length === 0) {
-      throw new Error('No users found matching your criteria.'); // This is the key message we handle in Search.jsx
+      throw new Error('No users found matching your criteria.');
     }
 
-    return response.data;
+    return response.data; // Return the full response with users and pagination info
   } catch (error) {
     console.error('Error fetching user data:', error);
     throw new Error(error.response?.data?.message || error.message || "Unable to fetch user data");
