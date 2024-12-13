@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import UserSearch from './components/UserSearch';
+import UserSearch from './components/UserSearch'; // Import the UserSearch component
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
         <h1>GitHub User Search</h1>
       </header>
       <main>
-        <UserSearch />
+        <UserSearch /> {/* Use the UserSearch component */}
       </main>
     </div>
   );
