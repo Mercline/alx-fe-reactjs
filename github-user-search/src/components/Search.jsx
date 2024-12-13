@@ -10,18 +10,21 @@ function Search() {
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
+
+    // Check if the username is provided
     if (!username) {
       setError("Please enter a username.");
       return;
     }
+
     setLoading(true); // Start loading
     setError(null); // Reset any previous errors
     setUserData([]); // Reset user data
 
     try {
       // Fetch user data based on advanced search criteria
-      const data = await fetchUserData(username, location, minRepos);
+      const data = await fetchUserData({ username, location, minRepos });
       setUserData(data); // Store user data in state
     } catch (err) {
       setError("Looks like we can't find the user");
