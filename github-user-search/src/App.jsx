@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import UserSearch from './components/UserSearch'; // Import the UserSearch component
+import UserSearch from './components/Search'; // Import the UserSearch component
 
 function App() {
   return (
