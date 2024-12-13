@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { getUser } from '../services/githubApi';
 
 function UserSearch() {
   const [username, setUsername] = useState('');
@@ -9,8 +9,8 @@ function UserSearch() {
   const handleSearch = async () => {
     if (!username) return;
     try {
-      const response = await axios.get(`https://api.github.com/users/${username}`);
-      setUserData(response.data);
+      const data = await getUser(username);
+      setUserData(data);
       setError(null); // Clear any previous errors
     } catch (err) {
       setUserData(null);
