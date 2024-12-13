@@ -26,9 +26,9 @@ function Search() {
     } catch (err) {
       setUserData(null); // Reset user data on error
 
-      // Set custom error message if no users were found
+      // EXACT LINE YOU ASKED FOR: Add this line for the specific error message
       if (err.message === 'No users found matching your criteria.') {
-        setError("Looks like we can't find the user");
+        setError("Looks like we can't find the user"); // This is the message you requested
       } else {
         // Display any other errors that occur
         setError(err.message || "An unexpected error occurred");
