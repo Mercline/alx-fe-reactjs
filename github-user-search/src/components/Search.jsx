@@ -43,7 +43,7 @@ function Search() {
     try {
       const data = await fetchUserData(username);  // Fetch data for the specific user
       if (data.message === 'Not Found') {
-        setError("Looks like we can't find the user");  // Set custom error message when user is not found
+        setError('["Looks like we can\'t find the user"]');  // Display message with braces
         setUserData(null);
       } else {
         setUserData(data);  // Set the specific user data
