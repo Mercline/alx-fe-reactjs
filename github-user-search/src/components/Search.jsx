@@ -1,51 +1,53 @@
 import React, { useState } from 'react';
-import { getUser } from '../services/githubApi';
+import { fetchUserData } from '../services/githubService';
 
-function UserSearch() {
+function Search() {
   const [username, setUsername] = useState('');
   const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSearch = async () => {
-    if (!username) return; // Prevent empty search
-
+  // Handle form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission (page reload)
     setLoading(true);     // Start loading
-    setError(null);       // Clear previous error
+    setError(null);       // Clear any previous errors
     setUserData(null);    // Reset user data
 
     try {
       // Fetch user data from GitHub API
-      const data = await getUser(username);
-      setUserData(data);
-      setError(null); // Clear any previous errors if user is found
+      const data = await fetchUserData(username);
+      setUserData(data);  // Store user data in state
     } catch (err) {
-      setUserData(null);
-      // Set the exact error message as specified
-      setError("Looks like we cant find the user"); // User not found
+      // Set the specific error message if user is not found
+      setError("Looks like we cant find the user"); // Display user not found message
     } finally {
-      setLoading(false); // Set loading to false after the API call
+      setLoading(false);  // Set loading to false once API call is complete
     }
   };
 
   return (
-    <div>
+    <div className="search-container">
       <h2>Search GitHub User</h2>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter GitHub username"
-      />
-      <button onClick={handleSearch} disabled={loading}>
-        {loading ? 'Searching...' : 'Search'}
-      </button>
+      
+      {/* Add form and onSubmit */}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter GitHub username"
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Searching...' : 'Search'}
+        </button>
+      </form>
 
-      {error && <div style={{ color: 'red' }}>{error}</div>} {/* Display exact error message */}
+      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
 
       {userData && (
-        <div>
-          <h3>{userData.name || userData.login}</h3> {/* Display user name or login */}
+        <div className="user-info">
+          <h3>{userData.login}</h3> {/* Display username (login) */}
           <p>{userData.bio}</p> {/* Display bio */}
           <img src={userData.avatar_url} alt="Avatar" width={100} />
           <p>
@@ -59,4 +61,4 @@ function UserSearch() {
   );
 }
 
-export default UserSearch;
+export default Search;
