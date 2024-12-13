@@ -32,9 +32,9 @@ function Search() {
       <h2 className="text-2xl font-semibold text-center mb-6">Search GitHub Users</h2>
 
       {/* Search form */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Username input */}
-        <div className="mb-4">
+        <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
             GitHub Username
           </label>
@@ -50,7 +50,7 @@ function Search() {
         </div>
 
         {/* Location input */}
-        <div className="mb-4">
+        <div>
           <label htmlFor="location" className="block text-sm font-medium text-gray-700">
             Location (optional)
           </label>
@@ -65,7 +65,7 @@ function Search() {
         </div>
 
         {/* Minimum Repositories input */}
-        <div className="mb-4">
+        <div>
           <label htmlFor="minRepos" className="block text-sm font-medium text-gray-700">
             Minimum Repositories (optional)
           </label>
@@ -80,11 +80,11 @@ function Search() {
         </div>
 
         {/* Submit button */}
-        <div className="mb-4 flex justify-center">
+        <div className="flex justify-center">
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-gray-400"
+            className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-gray-400"
           >
             {loading ? 'Searching...' : 'Search'}
           </button>
@@ -92,7 +92,7 @@ function Search() {
       </form>
 
       {/* Display error message */}
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
       {/* Display user data */}
       {userData && userData.items && userData.items.length > 0 ? (
