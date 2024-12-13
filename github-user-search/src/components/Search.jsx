@@ -15,18 +15,19 @@ function Search() {
     setUserData(null);
 
     try {
+      // Fetch user data from GitHub API
       const data = await fetchUserData(username);
-      setUserData(data);
+      setUserData(data);  // Store user data in state
     } catch (err) {
-      setError("Looks like we can't find the user");
+      setError(err.message);  // Set error message if user not found or any other error
     } finally {
-      setLoading(false);
+      setLoading(false);  // Set loading to false once API call is complete
     }
   };
 
   return (
     <div className="search-container">
-      <h1>Search GitHub Users</h1>
+      <h2>Search GitHub User</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -38,12 +39,12 @@ function Search() {
       </form>
 
       {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
 
       {userData && (
         <div className="user-info">
-          <h2>{userData.name}</h2>
-          <p>{userData.bio}</p>
+          <h3>{userData.login}</h3> {/* Display username (login) */}
+          <p>{userData.bio}</p> {/* Display bio */}
           <img src={userData.avatar_url} alt="Avatar" width={100} />
           <p>
             <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
