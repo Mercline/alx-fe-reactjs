@@ -19,8 +19,8 @@ function Search() {
       const data = await fetchUserData(username);
       setUserData(data);  // Store user data in state
     } catch (err) {
-      // Set the specific error message if user is not found
-      if (err.message === "Looks like we can't find the user") {
+      // Check if the error is a 404 (user not found)
+      if (err.response && err.response.status === 404) {
         setError("Looks like we can't find the user"); // Display user not found message
       } else {
         setError("Something went wrong. Please try again later."); // Display generic error message
