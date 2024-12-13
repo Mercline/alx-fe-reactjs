@@ -1,41 +1,49 @@
 // src/components/Search.jsx
 
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService';  // Correct function to use for searching users
+import { searchUsers, fetchUserData } from '../services/githubService';  // Import both functions
 
 function Search() {
   const [username, setUsername] = useState('');
-  const [location, setLocation] = useState('');
-  const [minRepos, setMinRepos] = useState('');
-  const [type, setType] = useState('');  // 'user' or 'org'
-  const [language, setLanguage] = useState('');
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState(null);  // This will hold the data for a specific user
+  const [userList, setUserList] = useState([]);  // This will hold the list of users from search results
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevent default form submission behavior
-
+  // Handle form submission for searching users
+  const handleSearch = async (e) => {
+    e.preventDefault();
     setLoading(true);
-    setError(null);  // Clear any previous errors
-
+    setError(null);
+    
     try {
-      // Call the correct search function here
-      const data = await searchUsers({
-        username,
-        location,
-        minRepos,
-        type,
-        language,
-        page: 1, // You can handle pagination later
-        perPage: 10 // Results per page
-      });
-
-      setUserData(data);  // Store the fetched user data
+      const data = await searchUsers({ username, page: 1, perPage: 10 });
+      setUserList(data);  // Set the list of users based on search
+      setUserData(null);   // Reset the specific user data
     } catch (err) {
-      setUserData([]);  // Reset user data on error
-      setError('An error occurred. Please try again.');
+      setUserList([]);  // Reset user list on error
+      setError('An error occurred while searching users. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle fetching data for a specific user
+  const handleFetchUserData = async () => {
+    if (!username) {
+      setError('Please enter a username.');
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const data = await fetchUserData(username);  // Fetch data for the specific user
+      setUserData(data);  // Set the specific user data
+      setUserList([]);    // Reset the user list
+    } catch (err) {
+      setUserData(null);  // Reset user data on error
+      setError('User not found or an error occurred.');
     } finally {
       setLoading(false);
     }
@@ -45,8 +53,8 @@ function Search() {
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-semibold mb-4">Search GitHub Users</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Username Input */}
+      {/* Form to search users */}
+      <form onSubmit={handleSearch} className="space-y-4">
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">GitHub Username</label>
           <input
@@ -58,84 +66,55 @@ function Search() {
             placeholder="Enter GitHub username"
           />
         </div>
-
-        {/* Location Input */}
-        <div>
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
-          <input
-            id="location"
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter location"
-          />
-        </div>
-
-        {/* Minimum Repositories Input */}
-        <div>
-          <label htmlFor="minRepos" className="block text-sm font-medium text-gray-700">Minimum Repositories</label>
-          <input
-            id="minRepos"
-            type="number"
-            value={minRepos}
-            onChange={(e) => setMinRepos(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter minimum number of repositories"
-          />
-        </div>
-
-        {/* User Type (user or org) */}
-        <div>
-          <label htmlFor="type" className="block text-sm font-medium text-gray-700">User Type</label>
-          <select
-            id="type"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Any Type</option>
-            <option value="user">User</option>
-            <option value="org">Organization</option>
-          </select>
-        </div>
-
-        {/* Language Input */}
-        <div>
-          <label htmlFor="language" className="block text-sm font-medium text-gray-700">Primary Language</label>
-          <input
-            id="language"
-            type="text"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter programming language"
-          />
-        </div>
-
-        {/* Search Button */}
         <button
           type="submit"
           className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
           disabled={loading}
         >
-          {loading ? 'Loading...' : 'Search'}
+          {loading ? 'Searching...' : 'Search Users'}
         </button>
       </form>
 
-      {/* Display search results */}
-      <div>
-        {error && <p className="text-red-500">{error}</p>}
-        <ul className="mt-4">
-          {userData.map((user) => (
-            <li key={user.id} className="p-2 border-b">
-              <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
-                {user.login}
-              </a>
-            </li>
-          ))}
-        </ul>
+      {/* Button to fetch specific user data */}
+      <div className="mt-4">
+        <button
+          onClick={handleFetchUserData}
+          className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+          disabled={loading || !username}
+        >
+          {loading ? 'Loading User...' : 'Fetch User Data'}
+        </button>
       </div>
+
+      {/* Error message */}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {/* Display specific user data if available */}
+      {userData && (
+        <div className="mt-6 p-4 border border-gray-300 rounded-md">
+          <h2 className="text-xl font-bold">{userData.name}</h2>
+          <p>{userData.bio}</p>
+          <a href={userData.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
+            View Profile
+          </a>
+        </div>
+      )}
+
+      {/* Display search results (list of users) */}
+      {userList.length > 0 && (
+        <div className="mt-6">
+          <h2 className="text-xl font-semibold">Search Results</h2>
+          <ul>
+            {userList.map((user) => (
+              <li key={user.id} className="p-2 border-b">
+                <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
+                  {user.login}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
