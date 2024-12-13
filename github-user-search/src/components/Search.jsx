@@ -19,7 +19,7 @@ function Search() {
       const data = await fetchUserData(username);
       setUserData(data);  // Store the fetched data in state
     } catch (err) {
-      setError('Looks like we can\'t find the user');  // Display error message
+      setError("Looks like we can't find the user");  // Display error message
     } finally {
       setLoading(false);  // Set loading state to false after the request completes
     }
