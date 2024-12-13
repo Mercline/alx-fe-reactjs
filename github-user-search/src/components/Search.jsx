@@ -1,13 +1,13 @@
 // src/components/Search.jsx
 
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService';  // Import the correct function
+import { searchUsers } from '../services/githubService';  // Correct function to use for searching users
 
 function Search() {
   const [username, setUsername] = useState('');
   const [location, setLocation] = useState('');
   const [minRepos, setMinRepos] = useState('');
-  const [type, setType] = useState('');  // user or org
+  const [type, setType] = useState('');  // 'user' or 'org'
   const [language, setLanguage] = useState('');
   const [userData, setUserData] = useState([]);
   const [error, setError] = useState(null);
@@ -15,21 +15,21 @@ function Search() {
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevent default form submission
+    e.preventDefault();  // Prevent default form submission behavior
 
     setLoading(true);
     setError(null);  // Clear any previous errors
 
     try {
-      // Call the searchUsers function from githubService with the filters
+      // Call the correct search function here
       const data = await searchUsers({
         username,
         location,
         minRepos,
         type,
         language,
-        page: 1,  // You can handle pagination later
-        perPage: 10  // Results per page
+        page: 1, // You can handle pagination later
+        perPage: 10 // Results per page
       });
 
       setUserData(data);  // Store the fetched user data
