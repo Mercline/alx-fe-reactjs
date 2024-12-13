@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '../services/githubService';  // Import the fetchUserData function
+import { fetchUserData } from '../services/githubService';
 
 function Search() {
-  const [username, setUsername] = useState('');  // State to manage the search input
-  const [userData, setUserData] = useState(null);  // State to store fetched user data
-  const [loading, setLoading] = useState(false);    // State to manage the loading status
-  const [error, setError] = useState(null);          // State to handle errors
+  const [username, setUsername] = useState('');
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -15,8 +15,8 @@ function Search() {
     setUserData(null);   // Clear previous user data
 
     try {
-      // Fetch user data from GitHub API using the username
-      const data = await fetchUserData(username);
+      // Fetch user data from GitHub API using the search term
+      const data = await fetchUserData(username);  // Assuming it fetches an array of users
       setUserData(data);  // Store the fetched data in state
     } catch (err) {
       setError("Looks like we can't find the user");  // Display error message
@@ -27,7 +27,7 @@ function Search() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-center mb-6">Search GitHub User</h2>
+      <h2 className="text-2xl font-semibold text-center mb-6">Search GitHub Users</h2>
 
       {/* Search Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -64,30 +64,32 @@ function Search() {
       {/* Error message */}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
-      {/* Display user data */}
-      {userData && (
+      {/* Display multiple users */}
+      {userData && Array.isArray(userData) && (
         <div className="user-info grid grid-cols-1 gap-6 mt-6">
-          <div className="p-4 border rounded-lg shadow-sm">
-            <div className="flex items-center mb-3">
-              <img
-                src={userData.avatar_url}
-                alt="Avatar"
-                className="w-16 h-16 rounded-full mr-4"
-              />
-              <h3 className="text-xl font-semibold">{userData.name || userData.login}</h3> {/* Display name or username */}
+          {userData.map((user) => (
+            <div key={user.id} className="p-4 border rounded-lg shadow-sm">
+              <div className="flex items-center mb-3">
+                <img
+                  src={user.avatar_url}
+                  alt="Avatar"
+                  className="w-16 h-16 rounded-full mr-4"
+                />
+                <h3 className="text-xl font-semibold">{user.login}</h3>
+              </div>
+              <p>{user.bio || 'No bio available'}</p>
+              <div className="mt-2">
+                <a
+                  href={user.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 hover:text-indigo-800"
+                >
+                  View Profile
+                </a>
+              </div>
             </div>
-            <p>{userData.bio || 'No bio available'}</p>
-            <div className="mt-2">
-              <a
-                href={userData.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-600 hover:text-indigo-800"
-              >
-                View Profile
-              </a>
-            </div>
-          </div>
+          ))}
         </div>
       )}
     </div>
