@@ -1,35 +1,29 @@
-import axios from 'axios';
+// src/services/githubService.js
 
-// Define the GitHub Search API URL
-const GITHUB_API_URL = 'https://api.github.com/search/users?q=';
-
-// Function to fetch user data based on search criteria
-export const fetchUserData = async ({ username, location, minRepos }) => {
+const searchUsers = async ({ username, location, minRepos }) => {
   try {
-    // Construct the query string for the search
-    let query = `${username}`;
-
-    // Add location filter if available
+    let query = `in:login ${username ? `+${username}` : ''}`;
+    
+    // Add additional filters if provided
     if (location) {
       query += `+location:${location}`;
     }
-
-    // Add minimum repositories filter if specified
-    if (minRepos > 0) {
+    if (minRepos) {
       query += `+repos:>=${minRepos}`;
     }
 
-    // Build the complete URL
-    const url = `${GITHUB_API_URL}${query}`;
+    const response = await fetch(`https://api.github.com/search/users?q=${query}`);
+    
+    if (!response.ok) {
+      throw new Error('Error fetching data');
+    }
 
-    // Make the GET request to GitHub's search API
-    const response = await axios.get(url);
-
-    // Return the data (users found)
-    return response.data;
+    const data = await response.json();
+    return data.items;
   } catch (error) {
-    // Log and throw an error if the request fails
-    console.error('Error fetching data from GitHub API:', error);
-    throw new Error('Error fetching user data');
+    console.error('Error fetching users:', error);
+    return [];
   }
 };
+
+export { searchUsers };

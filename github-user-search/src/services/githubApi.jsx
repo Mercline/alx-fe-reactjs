@@ -1,22 +1,26 @@
-// src/services/githubApi.js
-import axios from 'axios';
+// githubApi.js
 
-// The API URL and optional API key
-const GITHUB_API_URL = import.meta.env.VITE_GITHUB_API_URL || 'https://api.github.com';
-const GITHUB_API_KEY = import.meta.env.VITE_GITHUB_API_KEY;
-
-// Function to get user data from GitHub API
-const getUser = async (username) => {
+const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
   try {
-    const response = await axios.get(`${GITHUB_API_URL}/users/${username}`, {
-      headers: {
-        Authorization: `Bearer ${GITHUB_API_KEY}`, // Optional if you're using authentication
-      },
-    });
-    return response.data;
+    let query = `in:login ${username ? username : ''}`;
+    
+    if (location) {
+      query += `+location:${location}`;
+    }
+    if (minRepos) {
+      query += `+repos:>=${minRepos}`;
+    }
+
+    const response = await fetch(`https://api.github.com/search/users?q=${query}&page=${page}&per_page=10`);
+    
+    if (!response.ok) {
+      throw new Error('Error fetching user data');
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
-    throw new Error(error.message);
+    console.error('Error fetching users:', error);
+    throw error;
   }
 };
-
-export { getUser };
