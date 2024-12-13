@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Base URL for GitHub API search endpoint
-const BASE_URL = 'https://api.github.com/search/users';
+// Explicitly specify the GitHub API search endpoint with q parameter as part of the base URL
+const BASE_URL = 'https://api.github.com/search/users?q=';  // Updated base URL to include 'q='
 
 // Function to fetch user data based on advanced search criteria (username, location, minRepos)
 export const fetchUserData = async ({ username, location = '', minRepos = 0, page = 1 }) => {
@@ -18,8 +18,13 @@ export const fetchUserData = async ({ username, location = '', minRepos = 0, pag
 
     console.log('Constructed query:', query); // Log query for debugging
 
-    // Make the GET request to GitHub API with query parameters and pagination
-    const response = await axios.get(`${BASE_URL}?q=${query}&page=${page}&per_page=10`);
+    // Construct the full URL by appending the query string to the base URL
+    const url = `${BASE_URL}${query}&page=${page}&per_page=10`; // Explicitly using the updated base URL with 'q='
+
+    console.log('Request URL:', url); // Log the request URL for debugging
+
+    // Make the GET request to GitHub API with the constructed URL
+    const response = await axios.get(url);
 
     console.log('API Response:', response.data); // Log the API response for debugging
 
