@@ -27,7 +27,7 @@ function Search() {
       const data = await fetchUserData({ username, location, minRepos });
       setUserData(data); // Store user data in state
     } catch (err) {
-      setError("Looks like we can't find the user");
+      setError("Looks like we can't find the user"); // Show the specific error message
     } finally {
       setLoading(false); // Set loading to false once API call is complete
     }
