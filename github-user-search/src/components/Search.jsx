@@ -1,39 +1,36 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '../services/githubService';
+import { fetchUserData } from '../services/githubService';  // Import the fetchUserData function
 
 function Search() {
-  const [username, setUsername] = useState('');
-  const [location, setLocation] = useState('');
-  const [minRepos, setMinRepos] = useState(0);
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [username, setUsername] = useState('');  // State to manage the search input
+  const [userData, setUserData] = useState(null);  // State to store fetched user data
+  const [loading, setLoading] = useState(false);    // State to manage the loading status
+  const [error, setError] = useState(null);          // State to handle errors
 
-  // Handle form submit
+  // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission (page reload)
-    setLoading(true); // Start loading
-    setError(null); // Clear any previous errors
-    setUserData(null); // Reset user data
+    e.preventDefault();  // Prevent the default form submission
+    setLoading(true);    // Set loading state to true
+    setError(null);      // Clear previous error
+    setUserData(null);   // Clear previous user data
 
     try {
-      // Fetch user data from GitHub API with advanced search criteria
-      const data = await fetchUserData({ username, location, minRepos });
-      setUserData(data); // Store user data in state
+      // Fetch user data from GitHub API using the username
+      const data = await fetchUserData(username);
+      setUserData(data);  // Store the fetched data in state
     } catch (err) {
-      setError("Looks like we can't find the user"); // Display user not found message
+      setError('Looks like we can\'t find the user');  // Display error message
     } finally {
-      setLoading(false); // Set loading to false once API call is complete
+      setLoading(false);  // Set loading state to false after the request completes
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-center mb-6">Search GitHub Users</h2>
+      <h2 className="text-2xl font-semibold text-center mb-6">Search GitHub User</h2>
 
-      {/* Search form */}
+      {/* Search Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Username input */}
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
             GitHub Username
@@ -42,40 +39,10 @@ function Search() {
             type="text"
             id="username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}  // Update the username as the user types
             placeholder="Enter GitHub username"
             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             required
-          />
-        </div>
-
-        {/* Location input */}
-        <div>
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-            Location (optional)
-          </label>
-          <input
-            type="text"
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Enter location"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        {/* Minimum Repositories input */}
-        <div>
-          <label htmlFor="minRepos" className="block text-sm font-medium text-gray-700">
-            Minimum Repositories (optional)
-          </label>
-          <input
-            type="number"
-            id="minRepos"
-            value={minRepos}
-            onChange={(e) => setMinRepos(Number(e.target.value))}
-            placeholder="Enter minimum repositories"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
@@ -91,38 +58,37 @@ function Search() {
         </div>
       </form>
 
-      {/* Display error message */}
+      {/* Conditional rendering for loading state */}
+      {loading && <p className="text-center text-gray-600 mt-4">Loading...</p>}
+
+      {/* Error message */}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
       {/* Display user data */}
-      {userData && userData.items && userData.items.length > 0 ? (
+      {userData && (
         <div className="user-info grid grid-cols-1 gap-6 mt-6">
-          {userData.items.map((user) => (
-            <div key={user.id} className="p-4 border rounded-lg shadow-sm">
-              <div className="flex items-center mb-3">
-                <img
-                  src={user.avatar_url}
-                  alt="Avatar"
-                  className="w-16 h-16 rounded-full mr-4"
-                />
-                <h3 className="text-xl font-semibold">{user.login}</h3>
-              </div>
-              <p>{user.bio || 'No bio available'}</p>
-              <div className="mt-2">
-                <a
-                  href={user.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-indigo-600 hover:text-indigo-800"
-                >
-                  View Profile
-                </a>
-              </div>
+          <div className="p-4 border rounded-lg shadow-sm">
+            <div className="flex items-center mb-3">
+              <img
+                src={userData.avatar_url}
+                alt="Avatar"
+                className="w-16 h-16 rounded-full mr-4"
+              />
+              <h3 className="text-xl font-semibold">{userData.name || userData.login}</h3> {/* Display name or username */}
             </div>
-          ))}
+            <p>{userData.bio || 'No bio available'}</p>
+            <div className="mt-2">
+              <a
+                href={userData.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-600 hover:text-indigo-800"
+              >
+                View Profile
+              </a>
+            </div>
+          </div>
         </div>
-      ) : (
-        !loading && <p className="text-center text-gray-600">No users found. Please try another search.</p>
       )}
     </div>
   );
