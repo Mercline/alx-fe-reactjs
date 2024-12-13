@@ -9,12 +9,20 @@ function UserSearch() {
   const handleSearch = async () => {
     if (!username) return;
     try {
+      // Fetch user data from GitHub API
       const data = await getUser(username);
       setUserData(data);
       setError(null); // Clear any previous errors
     } catch (err) {
-      setUserData(null);
-      setError('User not found');
+      setUserData(null); // Reset user data on error
+
+      // Check if the error is related to the user not being found
+      if (err.message === 'User not found') {
+        setError("Looks like we can't find the user");
+      } else {
+        // Default error message for other errors
+        setError('An error occurred. Please try again.');
+      }
     }
   };
 
@@ -28,8 +36,10 @@ function UserSearch() {
       />
       <button onClick={handleSearch}>Search</button>
 
+      {/* Display error message if there's an error */}
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
+      {/* Display user data if available */}
       {userData && (
         <div>
           <h2>{userData.name}</h2>
