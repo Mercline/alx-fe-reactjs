@@ -27,8 +27,8 @@ function Search() {
       const data = await fetchUserData({ username, location, minRepos, page });
       setUserData(data.items);  // Store the list of users in state
     } catch (err) {
-      // If the error message is from fetchUserData, display a custom message
-      if (err.message.includes('No users found')) {
+      // If the error message is from fetchUserData, display the specific message
+      if (err.message === 'No users found matching your criteria.') {
         setError("Looks like we can't find the user");
       } else {
         // Display any other errors
