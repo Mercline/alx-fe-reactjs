@@ -1,9 +1,9 @@
 // src/components/UserSearch.jsx (or Search.jsx, depending on your naming)
 
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService'; // Ensure the correct import path
+import { fetchUserData, searchUsers } from '../services/githubService'; // Correct import for fetchUserData
 
-function Search() {  // Or use "UserSearch" if that's the name you prefer
+function Search() {  // Or UserSearch if you're using that name
   const [username, setUsername] = useState('');
   const [location, setLocation] = useState('');
   const [minRepos, setMinRepos] = useState('');
@@ -24,8 +24,15 @@ function Search() {  // Or use "UserSearch" if that's the name you prefer
     setError(null); // Clear any previous errors
 
     try {
-      const data = await searchUsers({ username, location, minRepos });
-      setUserData(data); // Store the search results
+      // Fetch user data based on the username (for single user fetch)
+      if (username) {
+        const data = await fetchUserData(username);
+        setUserData([data]); // Wrap it in an array for consistency with search results
+      } else {
+        // Fetch user data based on search criteria (if username is empty)
+        const data = await searchUsers({ username, location, minRepos });
+        setUserData(data); // Store the search results
+      }
     } catch (err) {
       setUserData([]); // Reset user data on error
       setError('An error occurred. Please try again.');

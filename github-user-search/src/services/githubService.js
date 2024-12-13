@@ -20,6 +20,17 @@ const get = async (url) => {
   }
 };
 
+// Function to fetch user data based on their username
+const fetchUserData = async (username) => {
+  try {
+    const data = await get(`/users/${username}`);
+    return data; // Return user data object
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error; // Rethrow the error if needed
+  }
+};
+
 // Function to search GitHub users with username, location, and minimum repositories
 const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
   try {
@@ -34,7 +45,6 @@ const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
     const searchUrl = `/search/users?q=${query}&page=${page}&per_page=10`;
 
     const data = await get(searchUrl);
-
     return data.items; // Return the list of users that match the search criteria
   } catch (error) {
     console.error("Error searching users:", error);
@@ -42,5 +52,4 @@ const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
   }
 };
 
-// Export the search function to be used in the component
-export { searchUsers };
+export { fetchUserData, searchUsers };
