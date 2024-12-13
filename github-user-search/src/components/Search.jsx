@@ -3,10 +3,7 @@ import { fetchUserData } from '../services/githubService';
 
 function Search() {
   const [username, setUsername] = useState('');
-  const [location, setLocation] = useState('');
-  const [minRepos, setMinRepos] = useState(0);
-  const [page, setPage] = useState(1);
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -20,18 +17,16 @@ function Search() {
 
     setLoading(true);     // Start loading
     setError(null);       // Clear any previous errors
-    setUserData([]);      // Reset user data before fetching new data
+    setUserData(null);    // Reset user data before fetching new data
 
     try {
       // Fetch user data from GitHub API with advanced search
-      console.log("Searching for username:", username);
-      const data = await fetchUserData({ username, location, minRepos, page });
-      console.log("Fetched data:", data); // Log fetched data for debugging
-      setUserData(data.items);  // Store the list of users in state
+      const data = await fetchUserData({ username });
+      setUserData(data.items[0]);  // Store the first user in state
     } catch (err) {
-      console.error("Error caught in handleSubmit:", err); // Log the error object to inspect it
+      setUserData(null); // Reset user data on error
 
-      // If the error message matches 'No users found matching your criteria', set the custom error message
+      // Set custom error message if no users were found
       if (err.message === 'No users found matching your criteria.') {
         setError("Looks like we can't find the user");
       } else {
@@ -45,9 +40,9 @@ function Search() {
 
   return (
     <div className="search-container">
-      <h2>Search GitHub Users</h2>
+      <h2>Search GitHub User</h2>
       
-      {/* Add form for username, location, minRepos, and pagination */}
+      {/* Add form for username */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -55,44 +50,30 @@ function Search() {
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Enter GitHub username"
         />
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Location (optional)"
-        />
-        <input
-          type="number"
-          value={minRepos}
-          onChange={(e) => setMinRepos(Number(e.target.value))}
-          placeholder="Min Repositories (optional)"
-        />
         <button type="submit" disabled={loading}>
           {loading ? 'Searching...' : 'Search'}
         </button>
       </form>
 
-      {/* Display error message */}
+      {/* Display error message if there is an error */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
+      {/* Display loading message while fetching data */}
+      {loading && <p>Loading...</p>}
+
       {/* Display user data if available */}
-      {userData && userData.length > 0 ? (
+      {userData && (
         <div className="user-info">
-          {userData.map((user) => (
-            <div key={user.id} className="user-item">
-              <h3>{user.login}</h3> {/* Display username (login) */}
-              <p>{user.bio || 'No bio available'}</p> {/* Display bio */}
-              <img src={user.avatar_url} alt="Avatar" width={100} />
-              <p>
-                <a href={user.html_url} target="_blank" rel="noopener noreferrer">
-                  View Profile
-                </a>
-              </p>
-            </div>
-          ))}
+          <h3>{userData.login}</h3> {/* Display username (login) */}
+          <p>{userData.name || 'No name available'}</p> {/* Display name */}
+          <p>{userData.bio || 'No bio available'}</p> {/* Display bio */}
+          <img src={userData.avatar_url} alt="Avatar" width={100} />
+          <p>
+            <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
+              View Profile
+            </a>
+          </p>
         </div>
-      ) : (
-        !loading && <p>No users found. Please try another search.</p>
       )}
     </div>
   );
