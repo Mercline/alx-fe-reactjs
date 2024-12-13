@@ -43,7 +43,8 @@ function Search() {
     try {
       const data = await fetchUserData(username);  // Fetch data for the specific user
       if (data.message === 'Not Found') {
-        setError('["Looks like we can\'t find the user"]');  // Display message with braces
+        // Exact message you want to display
+        setError('["Looks like we cant find the user"]');
         setUserData(null);
       } else {
         setUserData(data);  // Set the specific user data
@@ -110,7 +111,7 @@ function Search() {
 
       {/* Conditional Rendering for Error Message */}
       {error && !loading && (
-        <p className="text-red-500 mt-4">{error}</p>
+        <p className="text-red-500 mt-4">{error}</p>  
       )}
 
       {/* Conditional Rendering for Loading Message */}
