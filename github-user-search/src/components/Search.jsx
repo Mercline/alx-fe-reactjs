@@ -25,9 +25,14 @@ function Search() {
     try {
       // Fetch user data based on advanced search criteria
       const data = await fetchUserData({ username, location, minRepos });
-      setUserData(data); // Store user data in state
+      
+      if (data.length === 0) {
+        setError("Looks like we can't find the user"); // Specific message when no users are found
+      } else {
+        setUserData(data); // Store user data in state
+      }
     } catch (err) {
-      setError("Looks like we can't find the user"); // Show the specific error message
+      setError("Looks like we can't find the user"); // Show the specific error message if any error occurs
     } finally {
       setLoading(false); // Set loading to false once API call is complete
     }
@@ -80,7 +85,7 @@ function Search() {
       </form>
 
       {loading && <p className="mt-4">Loading...</p>}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>} {/* Error message */}
 
       {userData.length > 0 && (
         <div className="mt-6">
