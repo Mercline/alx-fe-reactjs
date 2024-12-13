@@ -108,11 +108,18 @@ function Search() {
         </button>
       </div>
 
-      {/* Error message */}
-      {error && <p className="text-red-500">{error}</p>}
+      {/* Conditional Rendering for Error Message */}
+      {error && !loading && (
+        <p className="text-red-500 mt-4">{error}</p>
+      )}
 
-      {/* Display specific user data if available */}
-      {userData && (
+      {/* Conditional Rendering for Loading Message */}
+      {loading && !error && (
+        <p className="text-gray-500 mt-4">Loading...</p>
+      )}
+
+      {/* Conditional Rendering: Display Specific User Data if Available */}
+      {userData && !loading && !error && (
         <div className="mt-6 p-4 border border-gray-300 rounded-md">
           <h2 className="text-xl font-bold">{userData.name}</h2>
           <p>{userData.bio}</p>
@@ -129,8 +136,8 @@ function Search() {
         </div>
       )}
 
-      {/* Display search results (list of users) */}
-      {userList.length > 0 && (
+      {/* Conditional Rendering: Display Search Results (List of Users) */}
+      {userList.length > 0 && !loading && !error && (
         <div className="mt-6">
           <h2 className="text-xl font-semibold">Search Results</h2>
           <ul>
