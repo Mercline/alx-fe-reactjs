@@ -36,4 +36,17 @@ const searchUsers = async ({ username, location, minRepos, type, language, page 
   return data.items;  // Return the list of users
 };
 
-export { searchUsers };
+// Function to fetch data for a specific user
+const fetchUserData = async (username) => {
+  try {
+    const userData = await get(`/users/${username}`);
+    return userData;  // Return the user data
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      throw new Error('User not found');  // Throw an error if the user is not found
+    }
+    throw new Error('An error occurred while fetching user data');
+  }
+};
+
+export { searchUsers, fetchUserData };
