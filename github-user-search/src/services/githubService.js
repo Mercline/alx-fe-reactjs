@@ -13,13 +13,13 @@ const api = axios.create({
   },
 });
 
-// General GET function to fetch data from GitHub
+// Function to make a GET request to the GitHub API
 const get = async (url) => {
   try {
     const response = await api.get(url);
     return response.data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     throw error;
   }
 };
@@ -34,29 +34,32 @@ const fetchUserData = async (username) => {
   }
 };
 
-// Function to search users with multiple query parameters (username, location, minRepos)
+// Function to search users with advanced query parameters (username, location, minRepos)
 const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
   try {
+    // Initialize the search query
     let query = '';
 
-    // Construct the search query based on provided parameters
+    // Add username filter to query if provided
     if (username) {
       query += `in:login ${username}`;
     }
+    // Add location filter if provided
     if (location) {
       query += `+location:${location}`;
     }
+    // Add minimum repositories filter if provided
     if (minRepos) {
       query += `+repos:>=${minRepos}`;
     }
 
-    // The final search query is appended to the endpoint
+    // Construct the full search URL using the query
     const searchUrl = `/search/users?q=${query}&page=${page}&per_page=10`;
 
-    // Perform the GET request using the constructed search URL
+    // Perform the GET request to search users
     const data = await get(searchUrl);
-    
-    // Return the list of users found in the search
+
+    // Return the list of users that match the search query
     return data.items;
   } catch (error) {
     console.error('Error searching users:', error);

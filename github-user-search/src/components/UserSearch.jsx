@@ -1,7 +1,7 @@
 // src/components/UserSearch.jsx
 
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService';  // Ensure the import path is correct
+import { searchUsers } from '../services/githubService'; // Adjust the import path as necessary
 
 function UserSearch() {
   const [username, setUsername] = useState('');
@@ -13,16 +13,16 @@ function UserSearch() {
 
   const handleSearch = async () => {
     if (!username && !location && !minRepos) {
-      setError("Please provide at least one search criterion");
+      setError('Please provide at least one search criterion');
       return;
     }
 
     setLoading(true);
-    setError(null); // Clear any previous errors
+    setError(null); // Clear previous errors
 
     try {
       const data = await searchUsers({ username, location, minRepos });
-      setUserData(data);
+      setUserData(data); // Store the search results
     } catch (err) {
       setUserData(null); // Reset user data on error
       setError('An error occurred. Please try again.');
