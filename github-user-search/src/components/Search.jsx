@@ -19,18 +19,11 @@ function Search() {
     try {
       // Fetch user data from GitHub API with advanced search criteria
       const data = await fetchUserData({ username, location, minRepos });
-
-      // If no users are found, set an appropriate error message
-      if (!data.items || data.items.length === 0) {
-        setError("Looks like we can't find the user");
-      } else {
-        setUserData(data); // Store user data in state
-      }
+      setUserData(data); // Store user data in state
     } catch (err) {
-      // Handle the error from the API call (e.g., network error)
-      setError("An error occurred while fetching user data");
+      setError("Looks like we can't find the user"); // Display user not found message
     } finally {
-      setLoading(false); // Set loading to false once the API call is complete
+      setLoading(false); // Set loading to false once API call is complete
     }
   };
 
