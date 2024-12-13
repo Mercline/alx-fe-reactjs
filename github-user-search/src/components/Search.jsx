@@ -43,7 +43,7 @@ function Search() {
     try {
       const data = await fetchUserData(username);  // Fetch data for the specific user
       if (data.message === 'Not Found') {
-        setError("Looks like we can't find the user");
+        setError("Looks like we can't find the user");  // Set custom error message when user is not found
         setUserData(null);
       } else {
         setUserData(data);  // Set the specific user data
@@ -51,7 +51,7 @@ function Search() {
       }
     } catch (err) {
       setUserData(null);  // Reset user data on error
-      setError('User not found or an error occurred.');
+      setError('An error occurred while fetching the user data.');
     } finally {
       setLoading(false);
     }
