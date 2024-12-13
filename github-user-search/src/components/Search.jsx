@@ -1,10 +1,9 @@
-// src/components/UserSearch.jsx
+// src/components/UserSearch.jsx (or Search.jsx, depending on your naming)
 
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService'; // Correct import for searchUsers
+import { searchUsers } from '../services/githubService'; // Ensure the correct import path
 
-function UserSearch() {
-  // State variables to manage input and results
+function Search() {  // Or use "UserSearch" if that's the name you prefer
   const [username, setUsername] = useState('');
   const [location, setLocation] = useState('');
   const [minRepos, setMinRepos] = useState('');
@@ -12,8 +11,10 @@ function UserSearch() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Handle the search action
-  const handleSearch = async () => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();  // Prevent the default form submission behavior
+
     if (!username && !location && !minRepos) {
       setError('Please provide at least one search criterion');
       return;
@@ -37,7 +38,8 @@ function UserSearch() {
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-semibold mb-4">Search GitHub Users</h1>
       
-      <div className="space-y-4">
+      {/* Form element with onSubmit */}
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Username Input */}
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">GitHub Username</label>
@@ -79,13 +81,13 @@ function UserSearch() {
 
         {/* Search Button */}
         <button
-          onClick={handleSearch}
+          type="submit"  // The button is now part of the form and will trigger the form submission
           className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
           disabled={loading}
         >
           {loading ? 'Searching...' : 'Search'}
         </button>
-      </div>
+      </form>
 
       {/* Display error if any */}
       {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
@@ -113,4 +115,4 @@ function UserSearch() {
   );
 }
 
-export default UserSearch;
+export default Search;  // Or export default UserSearch if you're using that name
