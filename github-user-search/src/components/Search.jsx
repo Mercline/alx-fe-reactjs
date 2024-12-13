@@ -1,7 +1,7 @@
 // src/components/Search.jsx
 
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService';  // Import the updated searchUsers function
+import { searchUsers } from '../services/githubService';  // Import the correct function
 
 function Search() {
   const [username, setUsername] = useState('');
