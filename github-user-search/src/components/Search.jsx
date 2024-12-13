@@ -24,9 +24,13 @@ function Search() {
 
     try {
       // Fetch user data from GitHub API with advanced search
+      console.log("Searching for username:", username);
       const data = await fetchUserData({ username, location, minRepos, page });
+      console.log("Fetched data:", data); // Log fetched data for debugging
       setUserData(data.items);  // Store the list of users in state
     } catch (err) {
+      console.error("Error caught in handleSubmit:", err); // Log the error object to inspect it
+
       // If the error message matches 'No users found matching your criteria', set the custom error message
       if (err.message === 'No users found matching your criteria.') {
         setError("Looks like we can't find the user");
