@@ -36,11 +36,4 @@ const searchUsers = async ({ username, location, minRepos, type, language, page 
   return data.items;  // Return the list of users
 };
 
-// Function to fetch data for a specific GitHub user by username
-const fetchUserData = async (username) => {
-  const userUrl = `https://api.github.com/users/${username}`;
-  const data = await get(userUrl);
-  return data;
-};
-
-export { searchUsers, fetchUserData };
+export { searchUsers };

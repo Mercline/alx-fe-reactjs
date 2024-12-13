@@ -4,7 +4,9 @@ import React, { useState } from 'react';
 import { searchUsers, fetchUserData } from '../services/githubService';  // Import both functions
 
 function Search() {
+  // State hooks to store user input and results
   const [username, setUsername] = useState('');
+  const [location, setLocation] = useState('');  // Add location state
   const [userData, setUserData] = useState(null);  // This will hold the data for a specific user
   const [userList, setUserList] = useState([]);  // This will hold the list of users from search results
   const [error, setError] = useState(null);
@@ -15,9 +17,10 @@ function Search() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
+
     try {
-      const data = await searchUsers({ username, page: 1, perPage: 10 });
+      // Pass the location along with other search parameters
+      const data = await searchUsers({ username, location, page: 1, perPage: 10 });
       setUserList(data);  // Set the list of users based on search
       setUserData(null);   // Reset the specific user data
     } catch (err) {
@@ -36,11 +39,16 @@ function Search() {
     }
     setLoading(true);
     setError(null);
-    
+
     try {
       const data = await fetchUserData(username);  // Fetch data for the specific user
-      setUserData(data);  // Set the specific user data
-      setUserList([]);    // Reset the user list
+      if (data.message === 'Not Found') {
+        setError("Looks like we can't find the user");
+        setUserData(null);
+      } else {
+        setUserData(data);  // Set the specific user data
+        setUserList([]);    // Reset the user list
+      }
     } catch (err) {
       setUserData(null);  // Reset user data on error
       setError('User not found or an error occurred.');
@@ -66,6 +74,20 @@ function Search() {
             placeholder="Enter GitHub username"
           />
         </div>
+
+        {/* Location input */}
+        <div>
+          <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
+          <input
+            id="location"
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter location (optional)"
+          />
+        </div>
+
         <button
           type="submit"
           className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
@@ -94,9 +116,16 @@ function Search() {
         <div className="mt-6 p-4 border border-gray-300 rounded-md">
           <h2 className="text-xl font-bold">{userData.name}</h2>
           <p>{userData.bio}</p>
-          <a href={userData.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
-            View Profile
-          </a>
+          <div className="flex items-center">
+            <img
+              src={userData.avatar_url}
+              alt={`${userData.login}'s avatar`}
+              className="w-16 h-16 rounded-full mr-4"
+            />
+            <a href={userData.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
+              View Profile
+            </a>
+          </div>
         </div>
       )}
 
@@ -107,9 +136,16 @@ function Search() {
           <ul>
             {userList.map((user) => (
               <li key={user.id} className="p-2 border-b">
-                <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
-                  {user.login}
-                </a>
+                <div className="flex items-center">
+                  <img
+                    src={user.avatar_url}
+                    alt={`${user.login}'s avatar`}
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="text-blue-600">
+                    {user.login}
+                  </a>
+                </div>
               </li>
             ))}
           </ul>
