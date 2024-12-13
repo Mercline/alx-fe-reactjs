@@ -30,15 +30,17 @@ const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
     if (location) query += `+location:${location}`;
     if (minRepos) query += `+repos:>=${minRepos}`;
 
+    // Construct the full URL for the search request
     const searchUrl = `/search/users?q=${query}&page=${page}&per_page=10`;
 
     const data = await get(searchUrl);
 
-    return data.items; // Return a list of matching users
+    return data.items; // Return the list of users that match the search criteria
   } catch (error) {
     console.error("Error searching users:", error);
     throw error;
   }
 };
 
+// Export the search function to be used in the component
 export { searchUsers };

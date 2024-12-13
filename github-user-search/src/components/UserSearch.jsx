@@ -1,7 +1,7 @@
 // src/components/UserSearch.jsx
 
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService'; // Adjust the path as necessary
+import { searchUsers } from '../services/githubService'; // Correct import for searchUsers
 
 function UserSearch() {
   // State variables to manage input and results
