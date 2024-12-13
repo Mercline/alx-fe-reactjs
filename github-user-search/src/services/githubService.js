@@ -34,7 +34,7 @@ const searchUsers = async ({ username, location, minRepos, type, language, page 
     if (language) query += `+language:${language}`;  // Filter by primary language
 
     // Construct the full search URL with query parameters
-    const searchUrl = `/search/users?q=${query}&page=${page}&per_page=${perPage}`;
+    const searchUrl = `https://api.github.com/search/users?q=${query}&page=${page}&per_page=${perPage}`;
 
     // Fetch user data from GitHub API using the constructed URL
     const data = await get(searchUrl);
