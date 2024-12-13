@@ -9,11 +9,11 @@ const fetchUserData = async (username) => {
     // Return the user data if successful
     return response.data;
   } catch (error) {
-    // Handle error: If user is not found, return a custom error message
+    // Handle error: If user is not found (404 error), throw a specific message
     if (error.response && error.response.status === 404) {
-      throw new Error("Looks like we can't find the user");
+      throw new Error("Looks like we can't find the user"); // Custom message for 404
     } else {
-      // If any other error occurs, throw a general error
+      // For any other error, throw a general error message
       throw new Error("Something went wrong. Please try again later.");
     }
   }

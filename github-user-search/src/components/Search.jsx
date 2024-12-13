@@ -10,16 +10,21 @@ function Search() {
   // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setUserData(null);
+    setLoading(true);     // Start loading
+    setError(null);       // Reset any previous errors
+    setUserData(null);    // Reset user data
 
     try {
       // Fetch user data from GitHub API
       const data = await fetchUserData(username);
       setUserData(data);  // Store user data in state
     } catch (err) {
-      setError(err.message);  // Set error message if user not found or any other error
+      // If there's an error, check if it's a "user not found" error
+      if (err.message === "Looks like we can't find the user") {
+        setError("Looks like we can't find the user"); // Display specific error message
+      } else {
+        setError("Something went wrong. Please try again later."); // Generic error message
+      }
     } finally {
       setLoading(false);  // Set loading to false once API call is complete
     }
