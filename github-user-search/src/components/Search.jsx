@@ -3,24 +3,29 @@ import { fetchUserData } from '../services/githubService';
 
 function Search() {
   const [username, setUsername] = useState('');
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]); // Initialize as an empty array to hold multiple users
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission (page reload)
+    if (!username.trim()) {
+      setError('Please enter a GitHub username');
+      return;
+    }
+
     setLoading(true);     // Start loading
     setError(null);       // Clear any previous errors
-    setUserData(null);    // Reset user data
+    setUserData([]);      // Reset user data before fetching new data
 
     try {
       // Fetch user data from GitHub API
       const data = await fetchUserData(username);
-      setUserData(data);  // Store user data in state
+      setUserData(data);  // Store the list of users in state
     } catch (err) {
       // Set the specific error message if user is not found
-      setError("Looks like we cant find the user"); // Display user not found message
+      setError(err.message || "Looks like we can't find the user");
     } finally {
       setLoading(false);  // Set loading to false once API call is complete
     }
@@ -43,19 +48,27 @@ function Search() {
         </button>
       </form>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
+      {/* Display error message */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {userData && (
+      {/* Display user data if available */}
+      {userData && userData.length > 0 ? (
         <div className="user-info">
-          <h3>{userData.login}</h3> {/* Display username (login) */}
-          <p>{userData.bio}</p> {/* Display bio */}
-          <img src={userData.avatar_url} alt="Avatar" width={100} />
-          <p>
-            <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
-              View Profile
-            </a>
-          </p>
+          {userData.map((user) => (
+            <div key={user.id} className="user-item">
+              <h3>{user.login}</h3> {/* Display username (login) */}
+              <p>{user.bio || 'No bio available'}</p> {/* Display bio, fallback if not available */}
+              <img src={user.avatar_url} alt="Avatar" width={100} />
+              <p>
+                <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+                  View Profile
+                </a>
+              </p>
+            </div>
+          ))}
         </div>
+      ) : (
+        !loading && <p>No users found. Please try another search.</p> // Show message if no users found
       )}
     </div>
   );
