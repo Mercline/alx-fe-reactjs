@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.github.com',  // Base URL for GitHub API
+  baseURL: 'https://api.github.com', // Base URL for GitHub API
   headers: {
     'Content-Type': 'application/json',
   },
@@ -20,24 +20,27 @@ const get = async (url) => {
   }
 };
 
-// Function to search GitHub users with username, location, and minimum repositories
-const searchUsers = async ({ username, location, minRepos, page = 1 }) => {
+// Function to search GitHub users with multiple query parameters (advanced search)
+const searchUsers = async ({ username, location, minRepos, type, language, page = 1, perPage = 10 }) => {
   try {
     let query = '';  // Initialize the query string
 
-    // Dynamically build the query string based on input parameters
+    // Build query string based on the passed filters
+
     if (username) query += `in:login ${username}`;  // Search by username
     if (location) query += `+location:${location}`;  // Filter by location
     if (minRepos) query += `+repos:>=${minRepos}`;  // Filter by minimum repositories
+    if (type) query += `+type:${type}`;  // Filter by user type (user, organization)
+    if (language) query += `+language:${language}`;  // Filter by primary programming language
 
     // Construct the full URL for the search request
-    const searchUrl = `/search/users?q=${query}&page=${page}&per_page=10`;
+    const searchUrl = `/search/users?q=${query}&page=${page}&per_page=${perPage}`;
 
-    // Call GitHub's search API endpoint to fetch the users
+    // Call the GitHub Search API to fetch the users based on the query
     const data = await get(searchUrl);
     
     // Return the list of users that match the search criteria
-    return data.items;  
+    return data.items;
   } catch (error) {
     console.error("Error searching users:", error);
     throw error;  // Throw the error if any occurs
